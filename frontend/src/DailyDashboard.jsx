@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { apiFetch } from './api.js'
 import './DailyDashboard.css'
 
 function getToday() {
@@ -36,8 +37,8 @@ function DailyDashboard({ catalogItems, categories }) {
 
       try {
         const [planResponse, historyResponse] = await Promise.all([
-          fetch(`/api/plans?date=${encodeURIComponent(date)}`),
-          fetch('/api/plans'),
+          apiFetch(`/api/plans?date=${encodeURIComponent(date)}`),
+          apiFetch('/api/plans'),
         ])
         const planResult = await planResponse.json()
         const historyResult = await historyResponse.json()
@@ -175,7 +176,7 @@ function DailyDashboard({ catalogItems, categories }) {
     setError('')
     setNotice('')
     try {
-      const response = await fetch(`/api/plans/${encodeURIComponent(date)}`, {
+      const response = await apiFetch(`/api/plans/${encodeURIComponent(date)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -214,7 +215,7 @@ function DailyDashboard({ catalogItems, categories }) {
 
     setError('')
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `/api/plans/${encodeURIComponent(date)}/items/${row._id}`,
         {
           method: 'PATCH',

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import AddCategory from './AddCategory.jsx'
 import DailyDashboard from './DailyDashboard.jsx'
+import { apiFetch } from './api.js'
 import './AddItems.css'
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const response = await fetch('/api/categories')
+        const response = await apiFetch('/api/categories')
         const result = await response.json().catch(() => null)
 
         if (!response.ok || !Array.isArray(result)) {
@@ -22,7 +23,7 @@ function App() {
 
         setCategories(result)
 
-        const itemsResponse = await fetch('/api/tasks')
+        const itemsResponse = await apiFetch('/api/tasks')
         const itemsResult = await itemsResponse.json().catch(() => null)
         if (!itemsResponse.ok || !Array.isArray(itemsResult)) {
           throw new Error('Could not load items.')
@@ -174,7 +175,7 @@ function AddItems({
     setIsSaving(true)
 
     try {
-      const response = await fetch('/api/tasks', {
+      const response = await apiFetch('/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -222,7 +223,7 @@ function AddItems({
 
     setListError('')
     try {
-      const response = await fetch(`/api/tasks/${editingItem._id}`, {
+      const response = await apiFetch(`/api/tasks/${editingItem._id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -245,7 +246,7 @@ function AddItems({
   async function deleteItem(itemId) {
     setListError('')
     try {
-      const response = await fetch(`/api/tasks/${itemId}`, { method: 'DELETE' })
+      const response = await apiFetch(`/api/tasks/${itemId}`, { method: 'DELETE' })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) {
         throw new Error(result.message || 'Could not remove item.')

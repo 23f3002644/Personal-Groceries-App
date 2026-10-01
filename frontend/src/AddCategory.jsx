@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { apiFetch } from './api.js'
 
 function AddCategory({
   categories = [],
@@ -27,7 +28,7 @@ function AddCategory({
     setIsSaving(true)
 
     try {
-      const response = await fetch('/api/categories', {
+      const response = await apiFetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: trimmedName }),
@@ -57,7 +58,7 @@ function AddCategory({
 
     setError('')
     try {
-      const response = await fetch(`/api/categories/${categoryId}`, {
+      const response = await apiFetch(`/api/categories/${categoryId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: trimmedName }),
@@ -77,7 +78,7 @@ function AddCategory({
   async function deleteCategory(categoryId) {
     setError('')
     try {
-      const response = await fetch(`/api/categories/${categoryId}`, {
+      const response = await apiFetch(`/api/categories/${categoryId}`, {
         method: 'DELETE',
       })
       const result = await response.json().catch(() => ({}))
